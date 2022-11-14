@@ -121,6 +121,27 @@ function M.setup()
     --   end,
     -- }
 
+    use {
+      "ggandor/leap.nvim",
+      config = function()
+        require('leap').add_default_mappings()
+      end
+    }
+    use {
+      "ggandor/flit.nvim",
+      config = function()
+        require('flit').setup {
+          keys = { f = 'f', F = 'F', t = 't', T = 'T' },
+          -- A string like "nv", "nvo", "o", etc.
+          labeled_modes = "v",
+          multiline = true,
+          -- Like `leap`s similar argument (call-specific overrides).
+          -- E.g.: opts = { equivalence_classes = {} }
+          opts = {}
+        }
+      end
+    }
+
     -- Markdown
     use {
       "iamcco/markdown-preview.nvim",
@@ -607,19 +628,6 @@ function M.setup()
     use { "terryma/vim-expand-region" }
     use { "terryma/vim-smooth-scroll" }
     use { "mg979/vim-visual-multi" }
-    use {
-      "AckslD/nvim-trevJ.lua",
-      config = function()
-        require("trevj").setup()
-      end,
-      module = "trevj",
-      setup = function()
-        vim.keymap.set("n", ",j", function()
-          require("trevj").format_at_cursor()
-        end)
-      end,
-      disable = false,
-    }
     -- use {
     --   "gbprod/substitute.nvim",
     --   event = "BufReadPre",
@@ -728,6 +736,9 @@ function M.setup()
       end,
       requires = { "stevearc/dressing.nvim" },
     }
+    -- use {
+    --   'unblevable/quick-scope'
+    -- }
     -- use {
     --   'edluffy/hologram.nvim',
     --   config = function()

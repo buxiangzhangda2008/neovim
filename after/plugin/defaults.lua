@@ -1,3 +1,4 @@
+---@diagnostic disable: assign-type-mismatch
 local api = vim.api
 local g = vim.g
 local opt = vim.opt

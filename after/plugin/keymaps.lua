@@ -89,6 +89,7 @@ local function quitTabOrPage()
 end
 
 keymap({ "n", "i" }, "<a-q>", quitTabOrPage, default_opts)
+keymap("n", "<leader>q", "<cmd>bp<cr><cmd>bd! #<cr>", default_opts)
 keymap({ "n", "i" }, "<a-q>", quitTabOrPage, default_opts)
 keymap({ "n", "i" }, "<a-r>", "<cmd>write<cr><cmd>so %<cr>", default_opts)
 keymap({ "n", "i" }, "<a-w>", "<cmd>write<cr>", default_opts)
@@ -353,11 +354,12 @@ whichkey.register(keymaps_tab, tab_default_opts_i)
 whichkey.register(keymaps_tab, tab_default_opts_n)
 whichkey.register(keymaps_tab, tab_default_opts_c)
 keymap("n", "<leader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
-keymap("n", "<leader>fG", ":lua require('telescope').extensions.live_grep_args.live_grep_args({cwd=\"$HOME/.config/nvim-beginner/nvim/\",})<CR>")
-  -- :lua require('telescope.builtin').live_grep({
-  --   prompt_title = 'find string in open buffers...',
-  --   grep_open_files = true
-  -- })
+keymap("n", "<leader>fG",
+  ":lua require('telescope').extensions.live_grep_args.live_grep_args({cwd=\"$HOME/.config/nvim-beginner/nvim/\",})<CR>")
+-- :lua require('telescope.builtin').live_grep({
+--   prompt_title = 'find string in open buffers...',
+--   grep_open_files = true
+-- })
 keymap("n", "<leader>kk", ":lua require('utils.term').cht()<CR>")
 keymap("n", "<leader>ks", ":lua require('utils.term').system_info_toggle()<CR>")
 keymap("n", "<leader>kd", ":lua require('utils.term').lazy_docker()<CR>")

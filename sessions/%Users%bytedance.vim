@@ -13,11 +13,17 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +7 testmethod.sh
+badd +169 ~/.config/nvim/lua/config/nvim-tree.lua
+badd +7 ~/.config/nvim/lua/config/treesitter.lua
+badd +4 ~/.config/nvim/after/ftplugin/java.lua
 argglobal
 %argdel
-$argadd testmethod.sh
-edit testmethod.sh
+edit ~/.config/nvim/after/ftplugin/java.lua
+let s:save_splitbelow = &splitbelow
+let s:save_splitright = &splitright
+set splitbelow splitright
+let &splitbelow = s:save_splitbelow
+let &splitright = s:save_splitright
 wincmd t
 let s:save_winminheight = &winminheight
 let s:save_winminwidth = &winminwidth
@@ -26,12 +32,13 @@ set winheight=1
 set winminwidth=0
 set winwidth=1
 argglobal
-let s:l = 7 - ((6 * winheight(0) + 32) / 64)
+balt ~/.config/nvim/lua/config/treesitter.lua
+let s:l = 4 - ((3 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 7
-normal! 02|
+keepjumps 4
+normal! 08|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -47,7 +54,6 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

@@ -13,24 +13,17 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +87 ies-knowledge-community-base/src/main/java/com/bytedance/knowledge_community/base/service/MessageCenterService.java
+badd +32 ies-knowledge-community-practice/src/test/java/com/bytedance/ThriftServiceTest.java
 argglobal
 %argdel
-edit ies-knowledge-community-base/src/main/java/com/bytedance/knowledge_community/base/service/MessageCenterService.java
-wincmd t
-let s:save_winminheight = &winminheight
-let s:save_winminwidth = &winminwidth
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
+edit ies-knowledge-community-practice/src/test/java/com/bytedance/ThriftServiceTest.java
 argglobal
-let s:l = 87 - ((46 * winheight(0) + 32) / 64)
+let s:l = 32 - ((27 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 87
-normal! 043|
+keepjumps 32
+normal! 06|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -38,8 +31,6 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
-let &winminheight = s:save_winminheight
-let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
