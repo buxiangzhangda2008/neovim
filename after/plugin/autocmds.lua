@@ -21,6 +21,13 @@ api.nvim_create_autocmd(
   { command = [[if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif]] }
 )
 
+local function dirContainsMvnw(dir)
+  if vim.fn.filereadable(dir .. "/mvnw") > 0 then
+    return dir .. "/mvnw"
+  end
+  return ''
+end
+
 local function dirContainsPom(dir)
   if vim.fn.filereadable(dir .. "/pom.xml") > 0 then
     return dir .. "/pom.xml"
@@ -108,6 +115,7 @@ api.nvim_create_autocmd("FocusGained", { command = [[:checktime]] })
 local function writeall()
   vim.api.nvim_exec("wall", false)
 end
+
 local function getJavaPackage(abspath)
 
   local relpath = string.gsub(abspath, "^.*src/test/java/", "")
@@ -119,7 +127,7 @@ local function getJavaPackage(abspath)
 end
 
 local function set_java_mvn_run_keymap()
-  vim.keymap.set("n", "<leader><F5>",
+  vim.keymap.set("n", "<F5>",
     function()
       writeall()
       -- echo 'exec:java -Dexec.mainClass='. package . '.'.filename .module
@@ -129,18 +137,35 @@ local function set_java_mvn_run_keymap()
       local filename = vim.fn.fnamemodify(filePath, ":t:r")
       local package = getJavaPackage(filePath)
       local project_dir = getProjectDir(dir)
-      exec = exec .. package .. '.' .. filename
-      vim.api.nvim_exec("TermExec dir=" .. project_dir .. " cmd=\"mvn " .. exec .. "\"", true)
+      local root = getRootProjectDir(dir)
+      local pl = " -pl " .. vim.fn.fnamemodify(project_dir, ":t:r")
+      local jvmargs = " -Dspring-boot.run.jvmArguments=\\\"--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/sun.net.util=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED \\\""
+      exec = exec .. package .. '.' .. filename .. pl .. jvmargs
+      local mvnw = dirContainsMvnw(root)
+      if string.len(mvnw) > 0 then
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"./mvnw " .. exec .. "\"", true)
+      else
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"mvn " .. exec .. "\"", true)
+      end
     end,
     { silent = true, buffer = true })
 end
 
 local function run(target)
-  local exec = "compile spring-boot:run -Dmaven.test.skip=true -P" .. "\\\\" .. "!cloud"
   local filePath = target
   local dir = vim.fn.fnamemodify(filePath, ":h")
   local project_dir = getProjectDir(dir)
-  vim.api.nvim_exec("TermExec dir=" .. project_dir .. " cmd=\"mvn " .. exec .. "\"", true)
+  local pl = " -pl " .. vim.fn.fnamemodify(project_dir, ":t:r")
+  local jvmargs = " -Dspring-boot.run.jvmArguments=\\\"--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/sun.net.util=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED \\\""
+  local exec = "compile spring-boot:run -Dmaven.test.skip=true -P" .. "\\\\" .. "!cloud" .. pl .. jvmargs
+  -- local exec = "compile spring-boot:run -Dmaven.test.skip=true -P" .. "\\\\" .. "!cloud" .. pl
+  local root = getRootProjectDir(project_dir)
+  local mvnw = dirContainsMvnw(root)
+  if string.len(mvnw) > 0 then
+    vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"./mvnw " .. exec .. "\"", true)
+  else
+    vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"mvn " .. exec .. "\"", true)
+  end
 end
 
 local function readFile(fileName)
@@ -149,7 +174,6 @@ local function readFile(fileName)
   f:close()
   return content
 end
-
 
 local function getRunnablePoms()
   local pwd_dir = io.popen("pwd")
@@ -202,7 +226,7 @@ local function showRunList()
 end
 
 local function set_springboot_run_keymap()
-  vim.keymap.set("n", "<F5>",
+  vim.keymap.set("n", "<leader><F5>",
     showRunList, { silent = true, buffer = true })
 end
 
@@ -215,8 +239,13 @@ local function set_java_mvn_build_keymap()
       local exec = "clean install -Dmaven.test.skip=true -P" .. "\\\\" .. "!cloud"
       local filePath = vim.fn.expand("%:p")
       local dir = vim.fn.fnamemodify(filePath, ":h")
-      local project_dir = getRootProjectDir(dir)
-      vim.api.nvim_exec("TermExec dir=" .. project_dir .. " cmd=\"mvn " .. exec .. "\"", true)
+      local root = getRootProjectDir(dir)
+      local mvnw = dirContainsMvnw(root)
+      if string.len(mvnw) > 0 then
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"./mvnw " .. exec .. "\"", true)
+      else
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"mvn " .. exec .. "\"", true)
+      end
     end,
     { silent = true, buffer = true })
 
@@ -227,8 +256,13 @@ local function set_java_mvn_build_keymap()
       local exec = "install -Dmaven.test.skip=true -P" .. "\\\\" .. "!cloud"
       local filePath = vim.fn.expand("%:p")
       local dir = vim.fn.fnamemodify(filePath, ":h")
-      local project_dir = getRootProjectDir(dir)
-      vim.api.nvim_exec("TermExec dir=" .. project_dir .. " cmd=\"mvn " .. exec .. "\"", true)
+      local root = getRootProjectDir(dir)
+      local mvnw = dirContainsMvnw(root)
+      if string.len(mvnw) > 0 then
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"./mvnw " .. exec .. "\"", true)
+      else
+        vim.api.nvim_exec("TermExec dir=" .. root .. " cmd=\"mvn " .. exec .. "\"", true)
+      end
     end,
     { silent = true, buffer = true })
 end

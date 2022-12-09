@@ -23,7 +23,7 @@ end
 function M.find_dotfiles()
   require("telescope.builtin").find_files {
     prompt_title = "<Dotfiles>",
-    cwd = "$HOME/.config/nvim-beginner/nvim/"
+    cwd = "$HOME/.config/nvim_custom/nvim/"
   }
 end
 

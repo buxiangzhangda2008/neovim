@@ -25,7 +25,7 @@ local custom_pickers = {
   dotfiles = {
     theme = custom_theme,
     -- cwd = "$HOME/workspace/alpha2phi/neovim-for-beginner/",
-    cwd = "$HOME/.config/nvim-beginner/nvim/"
+    cwd = "$HOME/.config/nvim_custom/nvim/",
     fun = "fd",
   },
 }

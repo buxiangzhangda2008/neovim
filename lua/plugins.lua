@@ -703,7 +703,7 @@ function M.setup()
       "chentoast/marks.nvim",
       event = "BufReadPre",
       config = function()
-        require("marks").setup {}
+        require("config.marks").setup()
       end,
     }
     use { 'dhruvasagar/vim-table-mode' }

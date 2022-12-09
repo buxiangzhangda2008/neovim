@@ -74,6 +74,7 @@ vim.cmd [[
 	" highlight CurrentWord ctermfg=LightYellow guifg=LightMagenta guibg=Gray
 	" highlight LspReferenceText ctermfg=LightYellow guifg=Red guibg=LightGrey
 	" highlight LspReferenceRead ctermfg=LightYellow guifg=Red guibg=LightGrey
+  inoremap <Esc> <Space><BS><Esc>
 ]]
 
 vim.notify = require("notify")

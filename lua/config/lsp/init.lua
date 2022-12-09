@@ -40,6 +40,7 @@ local servers = {
   awk_ls = {},
   lemminx = {},
   marksman = {},
+  asm_lsp = {},
 }
 
 function M.on_attach(client, bufnr)

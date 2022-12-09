@@ -1,10 +1,10 @@
----@diagnostic disable: undefined_variable
+---@diagnostic disable: undefined_variable, undefined_variable
 local M = {}
 local whichkey = require "which-key"
 local conf = {
   plugins = {
-    marks = false, -- shows a list of your marks on ' and `
-    registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+    marks = true, -- shows a list of your marks on ' and `
+    registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
     spelling = {
       enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
       suggestions = 20, -- how many suggestions should be shown in the list?
@@ -13,7 +13,7 @@ local conf = {
     -- No actual key bindings are created
     presets = {
       operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-      motions = false, -- adds help for motions
+      motions = true, -- adds help for motions
       text_objects = false, -- help for text objects triggered after entering an operator
       windows = false, -- default bindings on <c-w>
       nav = false, -- misc bindings to work with windows
@@ -227,23 +227,21 @@ local function normal_keymap()
         e = { "<cmd>Telescope git_files<cr>", "Git Files" },
         c = { "<cmd>Telescope commands<cr>", "Commands" },
         r = { "<cmd>Telescope file_browser<cr>", "Browser" },
-        w = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Current Buffer" },
+        -- w = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Current Buffer" },
         n = { "<cmd>Telescope notify<cr>", "List Notify" },
         t = { "<cmd>TodoTelescope keywords=TODO,Todo,todo<cr>", "List Todo" },
         p = { "<cmd>Telescope neoclip<cr>", "Clipboard" },
         w = { "<cmd>Telescope bookmarks<cr>", "Browser bookmarks" },
         m = { "<cmd>MarksListAll<cr>", "Marks" },
-        --e = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-      },
-      x = {
-        name = "External",
-        p = { "<cmd>lua require('utils.term').project_info_toggle()<CR>", "Project Code statistics" },
+        M = { "<cmd>MarksListGlobal<cr>", "Marks Global" },
+        B = { "<cmd>BookmarksQFListAll<cr>", "Marks Bookmarks" },
       },
     }
 
     local keymaps_p = {
       p = {
         name = "Project",
+        c = { "<cmd>lua require('utils.term').project_info_toggle()<CR>", "Project Code statistics" },
         p = { "<cmd>lua require'telescope'.extensions.project.project{}<cr>", "List" },
         s = { "<cmd>Telescope repo list<cr>", "Search" },
       },

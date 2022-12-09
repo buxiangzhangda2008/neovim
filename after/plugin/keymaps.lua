@@ -311,6 +311,12 @@ whichkey.register(
 local keymaps_leader_b = {
   b = {
     name = "Build mvn project"
+  },
+  B = {
+    name = "Build and Clean mvn project"
+  },
+  ["<F5>"] = {
+    name = "Mvn Run List"
   }
 }
 local keymaps_comment_b = {
@@ -355,7 +361,7 @@ whichkey.register(keymaps_tab, tab_default_opts_n)
 whichkey.register(keymaps_tab, tab_default_opts_c)
 keymap("n", "<leader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
 keymap("n", "<leader>fG",
-  ":lua require('telescope').extensions.live_grep_args.live_grep_args({cwd=\"$HOME/.config/nvim-beginner/nvim/\",})<CR>")
+  ":lua require('telescope').extensions.live_grep_args.live_grep_args({cwd=\"$HOME/.config/nvim_custom/nvim/\",})<CR>")
 -- :lua require('telescope.builtin').live_grep({
 --   prompt_title = 'find string in open buffers...',
 --   grep_open_files = true
